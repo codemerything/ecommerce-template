@@ -4,6 +4,7 @@ import {
   logout,
   signup,
   refreshToken,
+  getProfile,
 } from "../controllers/auth.controller.js";
 import { protectRoute } from "../middleware/auth.middleware.js";
 
@@ -16,6 +17,6 @@ authRouter.post("/login", login);
 
 authRouter.post("/logout", logout);
 authRouter.post("/refresh-token", refreshToken);
-// authRouter.get("/profile", protectRoute, getProfile);
+authRouter.get("/profile", protectRoute, getProfile);
 
 export default authRouter;
