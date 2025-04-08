@@ -1,21 +1,34 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
 import LoginPage from "./pages/Login";
 import SignupPage from "./pages/Signup";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Dashboard from "./pages/DashboardPage";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { ToastBar, Toaster } from "react-hot-toast";
+import { useUserStore } from "./store/useUserStore";
+import { use, useEffect } from "react";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const { user, checkAuth } = useUserStore();
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
-      </Routes>
-    </BrowserRouter>
+    <div>
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path="/"
+            element={!user ? <LoginPage /> : <Navigate to="/dashboard" />}
+          />
+
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Routes>
+        <Toaster />
+      </BrowserRouter>
+    </div>
   );
 }
 

@@ -1,30 +1,23 @@
 import { useState } from "react";
 import { Mail, Lock, Loader2, User } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useUserStore } from "../store/useUserStore";
+import { useNavigate } from "react-router-dom";
 
 export default function SignupPage() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
 
-  const handleSignup = (e) => {
+  const navigate = useNavigate();
+  const { signup, loading } = useUserStore();
+
+  const handleSignup = async (e) => {
     e.preventDefault();
-
-    if (!name || !email || !password) {
-      setError("All fields are required.");
-      return;
-    }
-
-    setError("");
-    setLoading(true);
-    console.log("Signing up with:", { name, email, password });
-
-    // Simulate sign-up delay
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
+    signup(formData);
   };
 
   return (
@@ -46,8 +39,13 @@ export default function SignupPage() {
               </span>
               <input
                 type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={formData.name}
+                onChange={(e) =>
+                  setFormData((formData) => ({
+                    ...formData,
+                    name: e.target.value,
+                  }))
+                }
                 placeholder="Your name"
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
@@ -63,13 +61,19 @@ export default function SignupPage() {
               </span>
               <input
                 type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={formData.email}
+                onChange={(e) =>
+                  setFormData((formData) => ({
+                    ...formData,
+                    email: e.target.value,
+                  }))
+                }
                 placeholder="you@example.com"
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
           </div>
+          <div></div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Password
@@ -80,14 +84,40 @@ export default function SignupPage() {
               </span>
               <input
                 type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={formData.password}
+                onChange={(e) =>
+                  setFormData((formData) => ({
+                    ...formData,
+                    password: e.target.value,
+                  }))
+                }
                 placeholder="••••••••"
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
           </div>
-          {error && <p className="text-red-500 text-sm">{error}</p>}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Confirm Password
+            </label>
+            <div className="relative">
+              <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                <Lock size={16} />
+              </span>
+              <input
+                type="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={(e) =>
+                  setFormData((formData) => ({
+                    ...formData,
+                    confirmPassword: e.target.value,
+                  }))
+                }
+                placeholder="••••••••"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          </div>
           <button
             type="submit"
             className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors flex justify-center items-center gap-2"
