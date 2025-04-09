@@ -14,6 +14,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import Dashboard from "../components/Dashboard";
+import AnalyticsPage from "../components/Analytics";
 import ProductsPage from "../components/ProductsPage";
 import { useUserStore } from "../store/useUserStore";
 
@@ -28,7 +29,7 @@ export default function DashboardLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const [activeTab, setActiveTab] = useState("Dashboard");
-  const { logout } = useUserStore();
+  const { user, logout } = useUserStore();
 
   const handleLogout = () => {
     logout();
@@ -39,7 +40,7 @@ export default function DashboardLayout() {
       {/* Sidebar */}
       <aside
         className={`${
-          isSidebarOpen ? "w-64" : "w-20"
+          isSidebarOpen ? "w-48" : "w-20"
         } bg-white border-r border-gray-200 transition-all duration-300 ease-in-out flex flex-col`}
       >
         <div className="p-4 border-b flex items-center justify-between">
@@ -114,7 +115,7 @@ export default function DashboardLayout() {
                 className={`ml-2 ${!isSidebarOpen ? "hidden md:block" : ""}`}
               >
                 <div className="flex items-center">
-                  <span className="font-medium text-sm">Admin User</span>
+                  <span className="font-medium text-sm">{user?.name}</span>
                   <ChevronDown size={16} className="ml-1" />
                 </div>
               </div>

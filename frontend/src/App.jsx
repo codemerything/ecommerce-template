@@ -21,7 +21,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Home ("/") and login both redirect if user is already logged in */}
+        {/* Home ("/") and login both redirect if user is already logged in! */}
+
         <Route
           path="/"
           element={user ? <Navigate to="/dashboard" /> : <LoginPage />}

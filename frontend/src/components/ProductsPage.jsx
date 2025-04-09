@@ -1,15 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { Star, Trash2, Plus, Search, Filter } from "lucide-react";
+import { Star, Trash2, Plus, Search, Filter, Upload } from "lucide-react";
+import { motion } from "framer-motion";
 
-export default function ProductsPage() {
+export default function CreateProductPage() {
   // Product form state
-  const [formData, setFormData] = useState({
+  const [newProduct, setNewProduct] = useState({
     name: "",
     price: "",
     category: "",
     description: "",
+    image: "",
   });
 
   // Initial dummy products data
@@ -21,7 +23,7 @@ export default function ProductsPage() {
       category: "Electronics",
       description:
         "Premium noise-cancelling wireless headphones with 30-hour battery life.",
-      image: "/placeholder.svg?height=80&width=80",
+      image: "placeholder.svg?height=80&width=80",
       featured: true,
     },
     {
@@ -72,8 +74,8 @@ export default function ProductsPage() {
   // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
+    setnewProduct({
+      ...newProduct,
       [name]: value,
     });
   };
@@ -85,10 +87,10 @@ export default function ProductsPage() {
     // Create new product object
     const newProduct = {
       id: Date.now().toString(),
-      name: formData.name,
-      price: Number.parseFloat(formData.price),
-      category: formData.category,
-      description: formData.description,
+      name: newProduct.name,
+      price: Number.parseFloat(newProduct.price),
+      category: newProduct.category,
+      description: newProduct.description,
       image: "/placeholder.svg?height=80&width=80",
       featured: false,
     };
@@ -97,11 +99,12 @@ export default function ProductsPage() {
     setProducts([...products, newProduct]);
 
     // Reset form
-    setFormData({
+    setnewProduct({
       name: "",
       price: "",
       category: "",
       description: "",
+      image: "",
     });
   };
 
@@ -135,7 +138,12 @@ export default function ProductsPage() {
   const categories = [...new Set(products.map((product) => product.category))];
 
   return (
-    <div className="">
+    <motion.div
+      className=""
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8 }}
+    >
       {/* Create Product Form */}
       <div className="bg-white rounded-lg shadow-md p-6 mb-8">
         <h2 className="text-xl font-semibold mb-4">Create New Product</h2>
@@ -148,13 +156,12 @@ export default function ProductsPage() {
               <input
                 type="text"
                 name="name"
-                value={formData.name}
+                value={newProduct.name}
                 onChange={handleInputChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
               />
             </div>
-
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Price ($)
@@ -162,7 +169,7 @@ export default function ProductsPage() {
               <input
                 type="number"
                 name="price"
-                value={formData.price}
+                value={newProduct.price}
                 onChange={handleInputChange}
                 step="0.01"
                 min="0"
@@ -170,7 +177,6 @@ export default function ProductsPage() {
                 required
               />
             </div>
-
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Category
@@ -178,10 +184,22 @@ export default function ProductsPage() {
               <input
                 type="text"
                 name="category"
-                value={formData.category}
+                value={newProduct.category}
                 onChange={handleInputChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Image URL
+              </label>
+              <input
+                type="file"
+                name="image"
+                accept="image/*"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
 
@@ -191,7 +209,7 @@ export default function ProductsPage() {
               </label>
               <textarea
                 name="description"
-                value={formData.description}
+                value={newProduct.description}
                 onChange={handleInputChange}
                 rows={3}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -359,6 +377,6 @@ export default function ProductsPage() {
           </p>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
