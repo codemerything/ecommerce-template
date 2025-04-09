@@ -1,11 +1,16 @@
 import "./App.css";
 import LoginPage from "./pages/Login";
 import SignupPage from "./pages/Signup";
-import Dashboard from "./pages/DashboardPage";
+import DashboardLayout from "./pages/DashboardPage"; // Updated import
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ToastBar, Toaster } from "react-hot-toast";
 import { useUserStore } from "./store/useUserStore";
 import { useEffect } from "react";
+import Dashboard from "./components/Dashboard";
+// import OrdersPage from "./components/OrdersPage";
+import ProductsPage from "./components/ProductsPage";
+// import CustomersPage from "./components/CustomersPage";
+import AnalyticsPage from "./components/Analytics";
 
 function App() {
   const { user, checkAuth, checkingAuth } = useUserStore();
@@ -21,8 +26,6 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Home ("/") and login both redirect if user is already logged in! */}
-
         <Route
           path="/"
           element={user ? <Navigate to="/dashboard" /> : <LoginPage />}
@@ -37,8 +40,15 @@ function App() {
         />
         <Route
           path="/dashboard"
-          element={user ? <Dashboard /> : <Navigate to="/login" />}
-        />
+          element={user ? <DashboardLayout /> : <Navigate to="/login" />}
+        >
+          <Route index element={<Dashboard />} />{" "}
+          {/* Default dashboard route */}
+          {/* <Route path="orders" element={<OrdersPage />} /> */}
+          <Route path="products" element={<ProductsPage />} />
+          {/* <Route path="customers" element={<CustomersPage />} /> */}
+          <Route path="analytics" element={<AnalyticsPage />} />
+        </Route>
       </Routes>
       <Toaster />
     </BrowserRouter>
