@@ -59,6 +59,11 @@ export const useUserStore = create((set) => ({
     }
   },
 
+  // This function checks the authentication status of the user.
+  // It makes a GET request to the "/auth/profile" endpoint to retrieve user data.
+  // If the request is successful, it updates the user state with the response data.
+  // If the request fails, it updates the user state with null and logs the error.
+
   checkAuth: async () => {
     set({ checkingAuth: true });
 
