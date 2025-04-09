@@ -13,18 +13,20 @@ import {
   LogOut,
   ChevronDown,
 } from "lucide-react";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import Dashboard from "../components/Dashboard";
 import AnalyticsPage from "../components/Analytics";
 import ProductsPage from "../components/ProductsPage";
 import { useUserStore } from "../store/useUserStore";
 
 const tabs = [
-  { id: "Dashboard", name: "Dashboard", icon: BarChart3 },
-  { id: "Orders", name: "Orders", icon: ShoppingCart },
-  { id: "Products", name: "Products", icon: Package },
-  { id: "Customers", name: "Customers", icon: Users },
-  { id: "Analytics", name: "Analytics", icon: BarChart3 },
+  { id: "dashboard", name: "Dashboard", icon: BarChart3, path: "" },
+  { id: "orders", name: "Orders", icon: ShoppingCart, path: "orders" },
+  { id: "products", name: "Products", icon: Package, path: "products" },
+  { id: "customers", name: "Customers", icon: Users, path: "customers" },
+  { id: "analytics", name: "Analytics", icon: BarChart3, path: "analytics" },
 ];
+
 export default function DashboardLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
@@ -59,16 +61,18 @@ export default function DashboardLayout() {
           <ul className="space-y-2">
             {tabs.map((tab) => (
               <li key={tab.id}>
-                <a
-                  href="#"
-                  className={`flex items-center p-2 rounded-md  hover:bg-gray-100 ${
-                    tab.id === activeTab ? "bg-blue-50 text-blue-500" : ""
-                  }`}
-                  onClick={() => setActiveTab(tab.id)}
+                <NavLink
+                  to={`/dashboard/${tab.path}`}
+                  end={tab.path === ""}
+                  className={({ isActive }) =>
+                    `flex items-center p-2 rounded-md hover:bg-gray-100 ${
+                      isActive ? "bg-blue-50 text-blue-500" : ""
+                    }`
+                  }
                 >
                   <tab.icon size={20} />
                   {isSidebarOpen && <span className="ml-3">{tab.name}</span>}
-                </a>
+                </NavLink>
               </li>
             ))}
           </ul>
@@ -125,11 +129,7 @@ export default function DashboardLayout() {
 
         {/* Main Content */}
         <main className="flex-1 overflow-y-auto p-6">
-          {activeTab === "Dashboard" && <Dashboard></Dashboard>}
-          {activeTab === "Products" && <ProductsPage></ProductsPage>}
-          {activeTab === "Orders" && <OrdersPage></OrdersPage>}
-          {activeTab === "Customers" && <CustomersPage></CustomersPage>}
-          {activeTab === "Analytics" && <AnalyticsPage></AnalyticsPage>}
+          <Outlet />
         </main>
       </div>
     </div>
