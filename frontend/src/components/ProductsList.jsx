@@ -1,6 +1,41 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useProductStore } from "../store/useProductStore";
+import { Search, Filter, Trash2, Star } from "lucide-react";
 
 export default function ProductsList() {
+  const { products, fetchAllProducts, toggleFeaturedProduct, deleteProduct } =
+    useProductStore();
+
+  useEffect(() => {
+    fetchAllProducts();
+  }, [fetchAllProducts]);
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("");
+
+  // Ensure products is an array before operations
+  // Filter products correctly
+  // Check if productsList is defined and is an array
+  // If not, set it to an empty array
+  const productsList = Array.isArray(products) ? products : [];
+
+  // Filter products based on search term and category filter
+  const filteredProducts = productsList.filter((product) => {
+    // Check if product is defined and has the necessary properties
+    if (!product || !product.name || !product.description) return false;
+    const matchesSearch =
+      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory =
+      categoryFilter === "" || product.category === categoryFilter;
+    return matchesSearch && matchesCategory;
+  });
+
+  // Extract unique categories correctly
+  const categories = [
+    ...new Set(productsList.map((product) => product.category)),
+  ].filter(Boolean);
+
   return (
     <div className="bg-white rounded-lg shadow-md p-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
@@ -35,6 +70,8 @@ export default function ProductsList() {
           </div>
         </div>
       </div>
+
+      {/* Table for displaying products */}
 
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
@@ -73,12 +110,12 @@ export default function ProductsList() {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {filteredProducts.map((product) => (
-              <tr key={product.id} className="hover:bg-gray-50">
+            {filteredProducts?.map((product) => (
+              <tr key={product._id} className="hover:bg-gray-50">
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center">
                     <div className="flex-shrink-0 h-10 w-10">
-                      <Image
+                      <img
                         src={product.image || "/placeholder.svg"}
                         alt={product.name}
                         width={40}
@@ -106,23 +143,31 @@ export default function ProductsList() {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <button
-                    onClick={() => toggleFeatured(product.id)}
-                    className={`p-1 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
-                      product.featured
+                    onClick={async () => {
+                      toggleFeaturedProduct(product._id),
+                        await fetchAllProducts();
+                      console.log("Toggle button with ", product.isFeatured);
+                    }}
+                    className={`p-1 cursor-pointer rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-200${
+                      product.isFeatured
                         ? "text-yellow-400 hover:text-yellow-500"
                         : "text-gray-300 hover:text-gray-400"
                     }`}
                   >
                     <Star
                       size={20}
-                      fill={product.featured ? "currentColor" : "none"}
+                      fill={product.isFeatured ? "#FCF55F" : "none"}
                     />
                   </button>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <button
-                    onClick={() => deleteProduct(product.id)}
-                    className="text-red-600 hover:text-red-900 p-1 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                    onClick={async () => {
+                      await deleteProduct(product._id);
+                      console.log("Delete button with ", product._id);
+                      fetchAllProducts();
+                    }}
+                    className="text-red-600 cursor-pointer hover:text-red-900 p-1 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                   >
                     <Trash2 size={18} />
                   </button>
@@ -143,7 +188,7 @@ export default function ProductsList() {
 
       <div className="mt-4 flex justify-between items-center">
         <p className="text-sm text-gray-500">
-          Showing {filteredProducts.length} of {products.length} products
+          Showing {filteredProducts.length} of {productsList.length} products
         </p>
       </div>
     </div>
