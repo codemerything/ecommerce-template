@@ -3,7 +3,7 @@ import axios from "../lib/axios";
 import { toast } from "react-hot-toast";
 
 // This is a Zustand store for managing user authentication state.
-export const useUserStore = create((set) => ({
+export const useUserStore = create((set, get) => ({
   user: null,
   loading: false,
   checkingAuth: true,
@@ -89,4 +89,58 @@ export const useUserStore = create((set) => ({
       );
     }
   },
+
+  refreshToken: async () => {
+    if (get().checkingAuth) return;
+
+    set({ checkingAuth: true });
+
+    try {
+      const response = await axios.get("/auth/refresh-token");
+      set({ checkingAuth: false });
+      return response.data;
+    } catch (error) {
+      set({ user: null, checkingAuth: false });
+      console.error("Error refreshing token:", error);
+    }
+  },
 }));
+
+let refreshPromise = null;
+
+// This interceptor handles the case when a 401 Unauthorized error occurs.
+// It attempts to refresh the token and retry the original request.
+// If the refresh fails, it logs the user out and redirects to the login page.
+// It uses a promise to ensure that only one refresh request is made at a time.
+// If a refresh is already in progress, it waits for it to complete before retrying the original request.
+// This prevents multiple simultaneous refresh requests from being sent.
+
+axios.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      try {
+        // If a refresh is already in progress, wait for it to complete
+        if (refreshPromise) {
+          await refreshPromise;
+          return axios(originalRequest);
+        }
+
+        // Start a new refresh process
+        refreshPromise = useUserStore.getState().refreshToken();
+        await refreshPromise;
+        refreshPromise = null;
+
+        return axios(originalRequest);
+      } catch (refreshError) {
+        // If refresh fails, redirect to login or handle as needed
+        useUserStore.getState().logout();
+        return Promise.reject(refreshError);
+      }
+    }
+    return Promise.reject(error);
+  }
+);
