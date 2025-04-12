@@ -17,6 +17,7 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import Dashboard from "../components/Dashboard";
 import AnalyticsPage from "../components/Analytics";
 import ProductsPage from "../components/ProductsPage";
+import CustomersPage from "../components/Customers";
 import { useUserStore } from "../store/useUserStore";
 
 const tabs = [
