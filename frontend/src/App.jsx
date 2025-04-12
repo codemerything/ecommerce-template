@@ -9,7 +9,7 @@ import { useEffect } from "react";
 import Dashboard from "./components/Dashboard";
 // import OrdersPage from "./components/OrdersPage";
 import ProductsPage from "./components/ProductsPage";
-// import CustomersPage from "./components/CustomersPage";
+import CustomersPage from "./components/Customers";
 import AnalyticsPage from "./components/Analytics";
 
 function App() {
@@ -46,7 +46,7 @@ function App() {
           {/* Default dashboard route */}
           {/* <Route path="orders" element={<OrdersPage />} /> */}
           <Route path="products" element={<ProductsPage />} />
-          {/* <Route path="customers" element={<CustomersPage />} /> */}
+          <Route path="customers" element={<CustomersPage />} />
           <Route path="analytics" element={<AnalyticsPage />} />
         </Route>
       </Routes>
