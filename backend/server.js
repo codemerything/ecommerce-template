@@ -6,10 +6,9 @@ import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.route.js";
 import productRoutes from "./routes/product.route.js";
 import cartRoutes from "./routes/cart.route.js";
-import couponRoutes from "./routes/coupon.route.js";
 import paymentRoutes from "./routes/payment.route.js";
-// import analyticsRoutes from "./routes/analytics.route.js";
-
+import analyticsRoutes from "./routes/analytics.route.js";
+import orderRoutes from "./routes/order.route.js";
 // Import the database connection function from db.js
 
 import { connectDB } from "./config/db.js";
@@ -28,9 +27,9 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
-app.use("/api/coupons", couponRoutes);
 app.use("/api/payments", paymentRoutes);
-// app.use("/api/analytics", analyticsRoutes);
+app.use("/api/orders", orderRoutes);
+app.use("/api/analytics", analyticsRoutes);
 // Starts the server and makes the app accessible on the specified PORT.
 //  Without this, the app won't handle requests.
 // Also added the connectDB function to connect to the database when the server starts.
