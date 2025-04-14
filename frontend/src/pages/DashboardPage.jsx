@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 import {
   BarChart3,
   Users,
@@ -12,26 +12,26 @@ import {
   Settings,
   LogOut,
   ChevronDown,
-} from "lucide-react";
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import Dashboard from "../components/Dashboard";
-import AnalyticsPage from "../components/Analytics";
-import ProductsPage from "../components/ProductsPage";
-import CustomersPage from "../components/Customers";
-import { useUserStore } from "../store/useUserStore";
+} from 'lucide-react';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import Dashboard from '../components/Dashboard';
+import AnalyticsPage from '../components/Analytics';
+import ProductsPage from '../components/ProductsPage';
+import CustomersPage from '../components/Customers';
+import { useUserStore } from '../store/useUserStore';
 
 const tabs = [
-  { id: "dashboard", name: "Dashboard", icon: BarChart3, path: "" },
-  { id: "orders", name: "Orders", icon: ShoppingCart, path: "orders" },
-  { id: "products", name: "Products", icon: Package, path: "products" },
-  { id: "customers", name: "Customers", icon: Users, path: "customers" },
-  { id: "analytics", name: "Analytics", icon: BarChart3, path: "analytics" },
+  { id: 'dashboard', name: 'Dashboard', icon: BarChart3, path: '' },
+  { id: 'orders', name: 'Orders', icon: ShoppingCart, path: 'orders' },
+  { id: 'products', name: 'Products', icon: Package, path: 'products' },
+  { id: 'customers', name: 'Customers', icon: Users, path: 'customers' },
+  { id: 'analytics', name: 'Analytics', icon: BarChart3, path: 'analytics' },
 ];
 
 export default function DashboardLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
-  const [activeTab, setActiveTab] = useState("Dashboard");
+  const [activeTab, setActiveTab] = useState('Dashboard');
   const { user, logout } = useUserStore();
 
   const handleLogout = () => {
@@ -43,16 +43,16 @@ export default function DashboardLayout() {
       {/* Sidebar */}
       <aside
         className={`${
-          isSidebarOpen ? "w-48" : "w-20"
-        } bg-white border-r border-gray-200 transition-all duration-300 ease-in-out flex flex-col`}
+          isSidebarOpen ? 'w-48' : 'w-20'
+        } flex flex-col border-r border-gray-200 bg-white transition-all duration-300 ease-in-out`}
       >
-        <div className="p-4 border-b flex items-center justify-between">
-          <h1 className={`font-bold text-xl ${!isSidebarOpen && "hidden"}`}>
+        <div className="flex items-center justify-between border-b p-4">
+          <h1 className={`text-xl font-bold ${!isSidebarOpen && 'hidden'}`}>
             E-Shop
           </h1>
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="p-1 rounded-md hover:bg-gray-100"
+            className="rounded-md p-1 hover:bg-gray-100"
           >
             <Menu size={20} />
           </button>
@@ -64,10 +64,10 @@ export default function DashboardLayout() {
               <li key={tab.id}>
                 <NavLink
                   to={`/dashboard/${tab.path}`}
-                  end={tab.path === ""}
+                  end={tab.path === ''}
                   className={({ isActive }) =>
-                    `flex items-center p-2 rounded-md hover:bg-gray-100 ${
-                      isActive ? "bg-blue-50 text-blue-500" : ""
+                    `flex items-center rounded-md p-2 hover:bg-gray-100 ${
+                      isActive ? 'bg-blue-50 text-blue-500' : ''
                     }`
                   }
                 >
@@ -79,11 +79,11 @@ export default function DashboardLayout() {
           </ul>
         </nav>
 
-        <div className="p-4 border-t">
+        <div className="border-t p-4">
           <button
             onClick={handleLogout}
             href="#"
-            className="flex items-center p-2 rounded-md hover:bg-gray-100 text-gray-700"
+            className="flex items-center rounded-md p-2 text-gray-700 hover:bg-gray-100"
           >
             <LogOut size={20} />
             {isSidebarOpen && <span className="ml-3">Logout</span>}
@@ -92,35 +92,42 @@ export default function DashboardLayout() {
       </aside>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex flex-1 flex-col overflow-hidden">
         {/* Header */}
-        <header className="bg-white border-b border-gray-200 p-4 flex items-center justify-between">
+        <header className="flex items-center justify-between border-b border-gray-200 bg-white p-4">
           <div className="relative w-64">
-            <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
+            <Search className="absolute top-2.5 left-2 h-4 w-4 text-gray-400" />
             <input
               type="text"
               placeholder="Search..."
-              className="pl-8 pr-4 py-2 w-full border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-md border py-2 pr-4 pl-8 focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
           </div>
           <div className="flex items-center space-x-4">
-            <button className="p-2 rounded-md hover:bg-gray-100 relative">
+            <button className="relative rounded-md p-2 hover:bg-gray-100">
               <Bell size={20} />
-              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+              <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500"></span>
             </button>
             <div className="flex items-center">
-              <img
-                src="/placeholder.svg?height=32&width=32"
-                alt="User"
-                width={32}
-                height={32}
-                className="rounded-full"
-              />
+              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-green-300">
+                <span className="font-semibold text-white">
+                  {user?.name
+                    ? user?.name
+                        .split(' ')
+                        .map((n) => n[0])
+                        .slice(0, 2)
+                        .join('')
+                        .toUpperCase()
+                    : 'CU'}
+                </span>
+              </div>
               <div
-                className={`ml-2 ${!isSidebarOpen ? "hidden md:block" : ""}`}
+                className={`ml-2 ${!isSidebarOpen ? 'hidden md:block' : ''}`}
               >
                 <div className="flex items-center">
-                  <span className="font-medium text-sm">{user?.name}</span>
+                  <span className="text-sm font-medium">
+                    {user?.name.toUpperCase()}
+                  </span>
                   <ChevronDown size={16} className="ml-1" />
                 </div>
               </div>
