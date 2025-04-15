@@ -90,7 +90,7 @@ export default function Dashboard() {
       }
     };
     fetchAnalyticsData();
-  });
+  }, []);
 
   if (isLoading) {
     return <>Loading...</>;
@@ -105,6 +105,11 @@ export default function Dashboard() {
       {/* Stats */}
       <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
         <div className="rounded-lg bg-white p-6 shadow">
+          {/* Formula for calulating change in revenue by month would be: 
+          const change = ((currentMonthRevenue - previousMonthRevenue) / previousMonthRevenue) * 100;
+          this goes for every single stat.
+          */}
+
           <div className="mb-4 flex items-center justify-between">
             <h3 className="text-sm font-medium text-gray-500">Total Revenue</h3>
             <div className="rounded-full bg-blue-50 p-2 text-blue-600">
