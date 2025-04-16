@@ -11,7 +11,7 @@ const router = express.Router();
 router.get("/", protectRoute, adminRoute, async (req, res) => {
   try {
     const analyticsData = await getAnalyticsData();
-    const customerStats = await getCustomerStats();
+    // const customerStats = await getCustomerStats();
 
     const endDate = new Date();
     const startDate = new Date(endDate.getTime() - 7 * 24 * 60 * 60 * 1000);
@@ -21,7 +21,7 @@ router.get("/", protectRoute, adminRoute, async (req, res) => {
     res.json({
       analyticsData,
       dailySalesData,
-      customerStats,
+      // customerStats,
     });
   } catch (error) {
     console.log("Error in analytics route", error.message);
