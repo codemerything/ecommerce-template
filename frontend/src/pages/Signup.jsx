@@ -1,18 +1,18 @@
-import { useState } from "react";
-import { Mail, Lock, Loader2, User } from "lucide-react";
-import { Link } from "react-router-dom";
-import { useUserStore } from "../store/useUserStore";
-import { useNavigate } from "react-router-dom";
+import { useState } from 'react';
+import { Mail, Lock, Loader2, User } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { useUserStore } from '../store/useUserStore';
+import { useNavigate } from 'react-router-dom';
 
 export default function SignupPage() {
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
   });
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { signup, loading } = useUserStore();
 
   const handleSignup = async (e) => {
@@ -21,16 +21,16 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-      <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-md">
-        <div className="flex justify-center mb-4">
+    <div className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
+      <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-md">
+        <div className="mb-4 flex justify-center">
           {/* Logo Placeholder */}
-          <div className="h-12 w-32 bg-gray-200 rounded-md"></div>
+          <div className="h-12 w-32 rounded-md bg-gray-200"></div>
         </div>
-        <h2 className="text-2xl font-semibold text-center mb-6">Sign Up</h2>
+        <h2 className="mb-6 text-center text-2xl font-semibold">Sign Up</h2>
         <form onSubmit={handleSignup} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="mb-1 block text-sm font-medium text-gray-700">
               Name
             </label>
             <div className="relative">
@@ -47,12 +47,12 @@ export default function SignupPage() {
                   }))
                 }
                 placeholder="Your name"
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full rounded-md border border-gray-300 py-2 pr-4 pl-10 focus:ring-2 focus:ring-blue-500 focus:outline-none"
               />
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="mb-1 block text-sm font-medium text-gray-700">
               Email
             </label>
             <div className="relative">
@@ -69,13 +69,13 @@ export default function SignupPage() {
                   }))
                 }
                 placeholder="you@example.com"
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full rounded-md border border-gray-300 py-2 pr-4 pl-10 focus:ring-2 focus:ring-blue-500 focus:outline-none"
               />
             </div>
           </div>
           <div></div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="mb-1 block text-sm font-medium text-gray-700">
               Password
             </label>
             <div className="relative">
@@ -92,12 +92,12 @@ export default function SignupPage() {
                   }))
                 }
                 placeholder="••••••••"
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full rounded-md border border-gray-300 py-2 pr-4 pl-10 focus:ring-2 focus:ring-blue-500 focus:outline-none"
               />
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="mb-1 block text-sm font-medium text-gray-700">
               Confirm Password
             </label>
             <div className="relative">
@@ -114,21 +114,21 @@ export default function SignupPage() {
                   }))
                 }
                 placeholder="••••••••"
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full rounded-md border border-gray-300 py-2 pr-4 pl-10 focus:ring-2 focus:ring-blue-500 focus:outline-none"
               />
             </div>
           </div>
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors flex justify-center items-center gap-2"
+            className="flex w-full items-center justify-center gap-2 rounded-md bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
             disabled={loading}
           >
             {loading && <Loader2 className="animate-spin" size={18} />}
-            {loading ? "Signing up..." : "Sign Up"}
+            {loading ? 'Signing up...' : 'Sign Up'}
           </button>
         </form>
-        <p className="mt-4 text-sm text-center text-gray-600">
-          Already have an account?{" "}
+        <p className="mt-4 text-center text-sm text-gray-600">
+          Already have an account?{' '}
           <Link to="/" className="text-blue-600 hover:underline">
             Log in
           </Link>
